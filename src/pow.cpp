@@ -23,8 +23,12 @@ unsigned int static DarkGravityWave(const CBlockIndex* pindexLast, const CBlockH
     const arith_uint256 bnPowLimit = UintToArith256(params.powLimit);
     int64_t nPastBlocks = 180; // ~3hr
 
-    // make sure we have at least (nPastBlocks + 1) blocks, otherwise just return powLimit
+    // During the initial DGW warm-up, use the RootPoW bootstrap target once
+    // the algorithm is active. Before activation, retain the network powLimit.
     if (!pindexLast || pindexLast->nHeight < nPastBlocks) {
+        if (pblock->GetBlockTime() >= nKAWPOWActivationTime) {
+            return UintToArith256(params.kawpowLimit).GetCompact();
+        }
         return bnPowLimit.GetCompact();
     }
 

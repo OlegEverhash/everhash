@@ -361,33 +361,15 @@ ethash_hash256 ethash_calculate_epoch_seed(int epoch_number) noexcept
         epoch_seed = ethash_keccak256_32(epoch_seed.bytes);
     return epoch_seed;
 }
-
 int ethash_calculate_light_cache_num_items(int epoch_number) noexcept
 {
-    static constexpr int item_size = sizeof(hash512);
-    static constexpr int num_items_init = light_cache_init_size / item_size;
-    static constexpr int num_items_growth = light_cache_growth / item_size;
-    static_assert(
-        light_cache_init_size % item_size == 0, "light_cache_init_size not multiple of item size");
-    static_assert(
-        light_cache_growth % item_size == 0, "light_cache_growth not multiple of item size");
-
-    int num_items_upper_bound = num_items_init + epoch_number * num_items_growth;
+    static constexpr int num_items_upper_bound = 49152; // fixed ~3 MiB light cache, epoch-independent
     int num_items = ethash_find_largest_prime(num_items_upper_bound);
     return num_items;
 }
-
 int ethash_calculate_full_dataset_num_items(int epoch_number) noexcept
 {
-    static constexpr int item_size = sizeof(hash1024);
-    static constexpr int num_items_init = full_dataset_init_size / item_size;
-    static constexpr int num_items_growth = full_dataset_growth / item_size;
-    static_assert(full_dataset_init_size % item_size == 0,
-        "full_dataset_init_size not multiple of item size");
-    static_assert(
-        full_dataset_growth % item_size == 0, "full_dataset_growth not multiple of item size");
-
-    int num_items_upper_bound = num_items_init + epoch_number * num_items_growth;
+    static constexpr int num_items_upper_bound = 1605632; // fixed 196 MiB DAG, epoch-independent
     int num_items = ethash_find_largest_prime(num_items_upper_bound);
     return num_items;
 }
