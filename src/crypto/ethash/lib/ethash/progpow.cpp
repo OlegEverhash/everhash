@@ -153,22 +153,22 @@ static const uint32_t round_constants[22] = {
         0x0000800A,0x8000000A,0x80008081,
         0x00008080,
 };
-static const uint32_t bezdomtherium_kawpow[15] = {
-        0x00000042, //B
-        0x00000045, //E
-        0x0000005A, //Z
-        0x00000044, //D
-        0x0000004F, //O
-        0x0000004D, //M
-        0x00000054, //T
-        0x00000048, //H
-        0x00000045, //E
-        0x00000052, //R
-        0x00000049, //I
-        0x00000055, //U
-        0x0000004D, //M
-        0x00000050, //P
-        0x00000057, //W
+static const uint32_t everhash_rootpow[15] = {
+        0x00000045, // E
+        0x00000056, // V
+        0x00000045, // E
+        0x00000052, // R
+        0x00000048, // H
+        0x00000041, // A
+        0x00000053, // S
+        0x00000048, // H
+        0x00000052, // R
+        0x0000004F, // O
+        0x0000004F, // O
+        0x00000054, // T
+        0x00000050, // P
+        0x0000004F, // O
+        0x00000057, // W
 };
 using lookup_fn = hash2048 (*)(const epoch_context&, uint32_t);
 using mix_array = std::array<std::array<uint32_t, num_regs>, num_lanes>;
@@ -313,7 +313,7 @@ result hash(const epoch_context& context, int block_number, const hash256& heade
 
         // 3rd apply ravencoin input constraints
         for (int i = 10; i < 25; i++)
-            state[i] = bezdomtherium_kawpow[i-10];
+            state[i] = everhash_rootpow[i-10];
 
         keccak_progpow_64(state);
 
@@ -339,7 +339,7 @@ result hash(const epoch_context& context, int block_number, const hash256& heade
 
     // 3rd apply ravencoin input constraints
     for (int i = 16; i < 25; i++)
-        state[i] = bezdomtherium_kawpow[i - 16];
+        state[i] = everhash_rootpow[i - 16];
 
     // Run keccak loop
     keccak_progpow_256(state);
@@ -387,7 +387,7 @@ result hash(const epoch_context_full& context, int block_number, const hash256& 
 
         // 3rd apply ravencoin input constraints
         for (int i = 10; i < 25; i++)
-            state[i] = bezdomtherium_kawpow[i-10];
+            state[i] = everhash_rootpow[i-10];
 
         keccak_progpow_64(state);
 
@@ -414,7 +414,7 @@ result hash(const epoch_context_full& context, int block_number, const hash256& 
 
     // 3rd apply ravencoin input constraints
     for (int i = 16; i < 25; i++)
-        state[i] = bezdomtherium_kawpow[i - 16];
+        state[i] = everhash_rootpow[i - 16];
 
     // Run keccak loop
     keccak_progpow_256(state);
@@ -447,7 +447,7 @@ bool verify(const epoch_context& context, int block_number, const hash256& heade
 
         // 3rd apply ravencoin input constraints
         for (int i = 10; i < 25; i++)
-            state[i] = bezdomtherium_kawpow[i-10];
+            state[i] = everhash_rootpow[i-10];
 
         keccak_progpow_64(state);
 
@@ -472,7 +472,7 @@ bool verify(const epoch_context& context, int block_number, const hash256& heade
 
     // 3rd apply ravencoin input constraints
     for (int i = 16; i < 25; i++)
-        state[i] = bezdomtherium_kawpow[i - 16];
+        state[i] = everhash_rootpow[i - 16];
 
     // Run keccak loop
     keccak_progpow_256(state);
@@ -512,7 +512,7 @@ hash256 hash_no_verify(const int& block_number, const hash256& header_hash,
 
         // 3rd apply ravencoin input constraints
         for (int i = 10; i < 25; i++)
-            state[i] = bezdomtherium_kawpow[i-10];
+            state[i] = everhash_rootpow[i-10];
 
         keccak_progpow_64(state);
 
@@ -534,7 +534,7 @@ hash256 hash_no_verify(const int& block_number, const hash256& header_hash,
 
     // 3rd apply ravencoin input constraints
     for (int i = 16; i < 25; i++)
-        state[i] = bezdomtherium_kawpow[i - 16];
+        state[i] = everhash_rootpow[i - 16];
 
     // Run keccak loop
     keccak_progpow_256(state);

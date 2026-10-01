@@ -46,8 +46,8 @@ BOOST_AUTO_TEST_CASE(kawpow_hash_empty)
         --count;
     }
 
-    const auto mix_hex = "16ce93d76ac9aab5c61069afed2fae692e5b85ce7020f220a5698f8d93dd25ab";
-    const auto final_hex = "cedb8c57847e796c34c1996546801651bd0bfce957fa2dd19db3aad767fc0065";
+    const auto mix_hex = "3623d46d235a1e0c4736b9d355163994009c1c0446d0d837c4bb4b11d0791626";
+    const auto final_hex = "5721cacd33a78bbd0b3a02263fa560ef5c91511cc56af5b7f686c747b698702b";
     BOOST_CHECK_EQUAL(to_hex(result.mix_hash), mix_hex);
     BOOST_CHECK_EQUAL(to_hex(result.final_hash), final_hex);
 }
@@ -62,8 +62,8 @@ BOOST_AUTO_TEST_CASE(kawpow_hash_30000)
     auto context = ethash::create_epoch_context(ethash::get_epoch_number(block_number));
 
     const auto result = progpow::hash(*context, block_number, header, nonce);
-    const auto mix_hex = "87531e1aae54c09a8b3fe8acbd9997646eefd00072d7ce47df299bb8c21aeeea";
-    const auto final_hex = "9279978d3aa5dc1c73c28a7ee6da7debb74d82d4f96ba68084bc1882592f0514";
+    const auto mix_hex = "2d26f5bc8c2280e7cf98281722a608989458b432eeef1c1546f48d2e8b5ff399";
+    const auto final_hex = "df18d0684af475c51febccea0ec1ed41bfd91afdb0d81efe976c2291a0998dcd";
     BOOST_CHECK_EQUAL(to_hex(result.mix_hash), mix_hex);
     BOOST_CHECK_EQUAL(to_hex(result.final_hash), final_hex);
 
@@ -113,7 +113,7 @@ BOOST_AUTO_TEST_CASE(kawpow_search)
     auto srl = progpow::search_light(ctxl, 0, {}, boundary, 0, 200);
     BOOST_CHECK(sr.mix_hash != ethash::hash256{});
     BOOST_CHECK(sr.final_hash != ethash::hash256{});
-    BOOST_CHECK(sr.nonce == 98);
+    BOOST_CHECK_EQUAL(sr.nonce, 36);
     BOOST_CHECK(sr.mix_hash == srl.mix_hash);
     BOOST_CHECK(sr.final_hash == srl.final_hash);
     BOOST_CHECK(sr.nonce == srl.nonce);
@@ -122,11 +122,11 @@ BOOST_AUTO_TEST_CASE(kawpow_search)
     srl = progpow::search_light(ctxl, 0, {}, boundary, 200, 5000);
     BOOST_CHECK(sr.mix_hash != ethash::hash256{});
     BOOST_CHECK(sr.final_hash != ethash::hash256{});
-    BOOST_CHECK(sr.nonce == 820);
+    BOOST_CHECK_EQUAL(sr.nonce, 221);
     BOOST_CHECK(sr.mix_hash == srl.mix_hash);
     BOOST_CHECK(sr.final_hash == srl.final_hash);
     BOOST_CHECK(sr.nonce == srl.nonce);
-    auto r = progpow::hash(ctx, 0, {}, 820);
+    auto r = progpow::hash(ctx, 0, {}, sr.nonce);
     BOOST_CHECK(sr.final_hash == r.final_hash);
     BOOST_CHECK(sr.mix_hash == r.mix_hash);
 }
